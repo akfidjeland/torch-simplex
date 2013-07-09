@@ -22,12 +22,15 @@ simplex_generate2d(lua_State* L)
 
 	snoise_permtable permtable; 
 	snoise_setup_perm(&permtable, mt_genrand_int32());
+
+	float* data = THFloatTensor_data(img);
 	
-	//! \todo do this in OMP parallel
-	for(size_t y=0; y < height; y++) {
-		for(size_t x=0; x < width; x++) {
-			//! \todo replace this 'set' with faster methods
-			THFloatTensor_set2d(img, x, y, snoise2(&permtable, x*scale, y*scale));
+	size_t x;
+	size_t y;
+	for(y=0; y < height; y++) {
+		float* row = data + y*width;
+		for(x=0; x < width; x++) {
+			*row++ = snoise2(&permtable, x*scale, y*scale);
 		}
 	}
 
