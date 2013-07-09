@@ -25,10 +25,11 @@ simplex_generate2d(lua_State* L)
 
 	float* data = THFloatTensor_data(img);
 	
-	size_t x;
 	size_t y;
+	#pragma omp parallel for private(y)
 	for(y=0; y < height; y++) {
 		float* row = data + y*width;
+		size_t x;
 		for(x=0; x < width; x++) {
 			*row++ = snoise2(&permtable, x*scale, y*scale);
 		}
