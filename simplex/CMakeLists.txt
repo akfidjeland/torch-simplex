@@ -1,3 +1,6 @@
-SET(src simplexnoise.c)
+SET(src init.c simplexnoise.c)
+SET(luasrc init.lua)
 
-ADD_LIBRARY(simplex SHARED ${src})
+FIND_PACKAGE(Torch REQUIRED)
+ADD_TORCH_PACKAGE(simplex "${src}" "${luasrc}" "Simplex noise generation")
+TARGET_LINK_LIBRARIES(simplex luaT TH)
